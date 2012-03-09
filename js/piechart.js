@@ -1,4 +1,6 @@
 
+var gief_piechart = (function (element) {
+
 var w = 450;
 var h = 300;
 var r = 100;
@@ -46,7 +48,7 @@ function fillArray() {
 // CREATE VIS & GROUPS ////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-var vis = d3.select("#easy-as-pie-chart").append("svg:svg")
+var vis = d3.select(element).append("svg:svg")
   .attr("width", w)
   .attr("height", h);
 
@@ -330,3 +332,7 @@ function textTween(d, i) {
     return "translate(" + Math.cos(val) * (r+textOffset) + "," + Math.sin(val) * (r+textOffset) + ")";
   };
 }
+
+    return update;
+
+});
