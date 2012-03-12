@@ -109,16 +109,9 @@ var totalUnits = center_group.append("svg:text")
 
 //var updateInterval = window.setInterval(update, 1500);
 
-var hourly_rate_labels = ['do 7€/h','7€/h do 13€/h','13€/h do 16€/h','16€/h do 20€/h','20€/h do 50€/h','50€/h do 80€/h','nad 80€/h'];
-
 // to run each time data is generated
-function update(year) {
-  var data = DATA.filter(function (item) { return item.years_study == year; });
-    streakerDataAdded = d3.range(7).map(function (i) {
-        return {port: hourly_rate_labels[i],
-                octetTotalCount: 0};
-    });
-    data.map(function (item) { streakerDataAdded[item.hourly_rate-1].octetTotalCount += 1; });
+function update(new_data) {
+    streakerDataAdded = new_data;
   oldPieData = filteredPieData;
   pieData = donut(streakerDataAdded);
 
