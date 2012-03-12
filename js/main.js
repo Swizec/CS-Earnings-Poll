@@ -4,6 +4,9 @@
     var pie = gief_piechart('#pie1', "students");
     var pie2 = gief_piechart('#pie2', "students");
 
+    $(".btn-group .btn").addClass("btn-primary");
+    $(".btn-group .default").button('toggle');
+
     $( "#slider" ).slider({
 	value: 1,
 	min: 1,
