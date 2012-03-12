@@ -1,5 +1,5 @@
 
-var gief_piechart = (function (element) {
+var gief_piechart = (function (element, total_label) {
 
 var w = 450;
 var h = 300;
@@ -16,7 +16,7 @@ var filteredPieData = [];
 
 //D3 helper function to populate pie slice parameters from array data
 var donut = d3.layout.pie().value(function(d){
-  return d.octetTotalCount;
+  return d.count;
 });
 
 //D3 helper function to create colors from an ordinal scale
@@ -39,8 +39,8 @@ var streakerDataAdded;
 
 function fillArray() {
   return {
-    port: "port",
-    octetTotalCount: Math.ceil(Math.random()*(arrayRange))
+    label: "port",
+    count: Math.ceil(Math.random()*(arrayRange))
   };
 }
 
@@ -100,7 +100,7 @@ var totalUnits = center_group.append("svg:text")
   .attr("class", "units")
   .attr("dy", 21)
   .attr("text-anchor", "middle") // text-align: right
-  .text("kb");
+  .text(total_label);
 
 
 ///////////////////////////////////////////////////////////
@@ -115,12 +115,12 @@ function update(new_data) {
   oldPieData = filteredPieData;
   pieData = donut(streakerDataAdded);
 
-  var totalOctets = 0;
+  var totalCount = 0;
   filteredPieData = pieData.filter(filterData);
   function filterData(element, index, array) {
-    element.name = streakerDataAdded[index].port;
-    element.value = streakerDataAdded[index].octetTotalCount;
-    totalOctets += element.value;
+    element.name = streakerDataAdded[index].label;
+    element.value = streakerDataAdded[index].count;
+    totalCount += element.value;
     return (element.value > 0);
   }
 
@@ -130,8 +130,7 @@ function update(new_data) {
     arc_group.selectAll("circle").remove();
 
     totalValue.text(function(){
-      var kb = totalOctets/1024;
-      return kb.toFixed(1);
+      return totalCount;
       //return bchart.label.abbreviated(totalOctets*8);
     });
 
@@ -189,7 +188,7 @@ function update(new_data) {
         }
       })
       .text(function(d){
-        var percentage = (d.value/totalOctets)*100;
+        var percentage = (d.value/totalCount)*100;
         return percentage.toFixed(1) + "%";
       });
 
@@ -212,7 +211,7 @@ function update(new_data) {
           return "end";
         }
       }).text(function(d){
-        var percentage = (d.value/totalOctets)*100;
+        var percentage = (d.value/totalCount)*100;
         return percentage.toFixed(1) + "%";
       });
 

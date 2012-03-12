@@ -1,8 +1,8 @@
 
 (function ($) {
 
-    var pie = gief_piechart('#pie1');
-    var pie2 = gief_piechart('#pie2');
+    var pie = gief_piechart('#pie1', "students");
+    var pie2 = gief_piechart('#pie2', "students");
 
     $( "#slider" ).slider({
 	value: 1,
@@ -12,8 +12,8 @@
         width: '100px',
 	slide: function( event, ui ) {
 	    $( "#amount" ).html("Studying for "+ui.value+" years");
-            pie(year_vs_pay(ui.value));
-            pie2(year_vs_pay(ui.value-1));
+            pie(year_vs_pay(ui.value), "students");
+            pie2(year_vs_pay(ui.value-1), "students");
 	}
     });
     pie(year_vs_pay(1));
@@ -37,9 +37,9 @@ function year_vs_pay(year) {
 
     var data = DATA.filter(function (item) { return item.years_study == year; }),
         fin_data = d3.range(7).map(function (i) {
-            return {port: hourly_rate_labels[i],
-                    octetTotalCount: 0};
+            return {label: hourly_rate_labels[i],
+                    count: 0};
         });
-    data.map(function (item) { fin_data[item.hourly_rate-1].octetTotalCount += 1; });
+    data.map(function (item) { fin_data[item.hourly_rate-1].count += 1; });
     return fin_data;
 }
