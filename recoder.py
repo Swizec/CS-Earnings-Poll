@@ -37,8 +37,6 @@ TRANSLATIONS = [
 ]
 
 def recode(line):
-    if ',Ne,' in line:
-        return None
     for fr, to in TRANSLATIONS:
         line = line.replace(fr, to)
     return line

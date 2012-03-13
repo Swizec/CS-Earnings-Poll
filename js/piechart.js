@@ -1,4 +1,6 @@
 
+var gief_piechart = (function (element, total_label) {
+
 var w = 450;
 var h = 300;
 var r = 100;
@@ -14,7 +16,7 @@ var filteredPieData = [];
 
 //D3 helper function to populate pie slice parameters from array data
 var donut = d3.layout.pie().value(function(d){
-  return d.octetTotalCount;
+  return d.count;
 });
 
 //D3 helper function to create colors from an ordinal scale
@@ -37,8 +39,8 @@ var streakerDataAdded;
 
 function fillArray() {
   return {
-    port: "port",
-    octetTotalCount: Math.ceil(Math.random()*(arrayRange))
+    label: "port",
+    count: Math.ceil(Math.random()*(arrayRange))
   };
 }
 
@@ -46,7 +48,7 @@ function fillArray() {
 // CREATE VIS & GROUPS ////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-var vis = d3.select("#easy-as-pie-chart").append("svg:svg")
+var vis = d3.select(element).append("svg:svg")
   .attr("width", w)
   .attr("height", h);
 
@@ -98,7 +100,7 @@ var totalUnits = center_group.append("svg:text")
   .attr("class", "units")
   .attr("dy", 21)
   .attr("text-anchor", "middle") // text-align: right
-  .text("kb");
+  .text(total_label);
 
 
 ///////////////////////////////////////////////////////////
@@ -107,25 +109,18 @@ var totalUnits = center_group.append("svg:text")
 
 //var updateInterval = window.setInterval(update, 1500);
 
-var hourly_rate_labels = ['do 7€/h','7€/h do 13€/h','13€/h do 16€/h','16€/h do 20€/h','20€/h do 50€/h','50€/h do 80€/h','nad 80€/h'];
-
 // to run each time data is generated
-function update(year) {
-  var data = DATA.filter(function (item) { return item.years_study == year; });
-    streakerDataAdded = d3.range(7).map(function (i) {
-        return {port: hourly_rate_labels[i],
-                octetTotalCount: 0};
-    });
-    data.map(function (item) { streakerDataAdded[item.hourly_rate-1].octetTotalCount += 1; });
+function update(new_data) {
+    streakerDataAdded = new_data;
   oldPieData = filteredPieData;
   pieData = donut(streakerDataAdded);
 
-  var totalOctets = 0;
+  var totalCount = 0;
   filteredPieData = pieData.filter(filterData);
   function filterData(element, index, array) {
-    element.name = streakerDataAdded[index].port;
-    element.value = streakerDataAdded[index].octetTotalCount;
-    totalOctets += element.value;
+    element.name = streakerDataAdded[index].label;
+    element.value = streakerDataAdded[index].count;
+    totalCount += element.value;
     return (element.value > 0);
   }
 
@@ -135,8 +130,7 @@ function update(year) {
     arc_group.selectAll("circle").remove();
 
     totalValue.text(function(){
-      var kb = totalOctets/1024;
-      return kb.toFixed(1);
+      return totalCount;
       //return bchart.label.abbreviated(totalOctets*8);
     });
 
@@ -194,7 +188,7 @@ function update(year) {
         }
       })
       .text(function(d){
-        var percentage = (d.value/totalOctets)*100;
+        var percentage = (d.value/totalCount)*100;
         return percentage.toFixed(1) + "%";
       });
 
@@ -217,7 +211,7 @@ function update(year) {
           return "end";
         }
       }).text(function(d){
-        var percentage = (d.value/totalOctets)*100;
+        var percentage = (d.value/totalCount)*100;
         return percentage.toFixed(1) + "%";
       });
 
@@ -330,3 +324,7 @@ function textTween(d, i) {
     return "translate(" + Math.cos(val) * (r+textOffset) + "," + Math.sin(val) * (r+textOffset) + ")";
   };
 }
+
+    return update;
+
+});
