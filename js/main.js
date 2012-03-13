@@ -7,6 +7,13 @@
     $(".btn-group .btn").addClass("btn-primary");
     $(".btn-group .default").button('toggle');
 
+    $(".btn-group .btn").click(function (e) {
+        var $btn = $(e.currentTarget);
+        if (!$btn.hasClass('active')) {
+            console.log($btn.attr('name'));
+        }
+    });
+
     $( "#slider" ).slider({
 	value: 1,
 	min: 1,
