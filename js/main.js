@@ -50,23 +50,28 @@
             }
         };
 
-    var crosstabs = [];
+    var crosstabs = [
+        {desc: Handlebars.compile("Studying for {{value}} hours a week."),
+         dim: {pie: data_functions.year_vs_pay,
+               slider: [1,2,3,4,5,6,7,8]},
+         label: "students"
+        },
+        {desc: Handlebars.compile("Studying for {{value}} hours a week."),
+         dim: {pie: data_functions.study_vs_pay,
+               slider: ["do 10h", "11-20h", "21-30h", "31-40h", "nad 50h"]},
+         label: "students"
+        }
+    ];
+
     var $proto = $("<li></li>"), $el, $crosstabs = $("#crosstabs");
 
-    $el = $proto.clone();
-    $("#crosstabs").append($el);
-    crosstabs.push(crosstab($el,
-                            Handlebars.compile("Studying for {{value}} hours a week."),
-                            data_functions.year_vs_pay,
-                            "students"));
+    crosstabs.map(function (options) {
+        $el = $proto.clone();
+        $crosstabs.append($el);
+        options.$element = $el;
 
-    $el = $proto.clone();
-    $("#crosstabs").append($el);
-    crosstabs.push(crosstab($el,
-                            Handlebars.compile("Studying for {{value}} hours a week."),
-                            data_functions.study_vs_pay,
-                            "students"));
-
+        return crosstab(options);
+    });
 
     var update = function () {
         crosstabs.map(function (update_crosstab) {

@@ -1,19 +1,28 @@
 
-var crosstab = (function ($element, description, data_func, label) {
+var crosstab = (function (options) {
+    var opts = $.extend({$element: $(),
+                         desc: function () {},
+                         dim: {slider: [],
+                               pie: function () {}},
+                         label: ""},
+                        options);
+
     var template = Handlebars.compile($(".crosstab-template").html());
-    $element.html(template({}));
+    opts.$element.html(template({}));
 
     var slider_value = 1,
-        pie = gief_piechart($element.find(".pie-chart")[0], label),
+        pie = gief_piechart(opts.$element.find(".pie-chart")[0], opts.label),
         update = function () {
-            $element.find(".description").html(description({value: slider_value}));
-            pie(data_func(slider_value));
+            opts.$element.find(".description").html(
+                opts.desc({value: opts.dim.slider[slider_value-1]}));
+
+            pie(opts.dim.pie(slider_value));
         };
 
-    $element.find(".slider").slider({
+    opts.$element.find(".slider").slider({
 	value: 1,
 	min: 1,
-	max: 8,
+	max: opts.dim.slider.length,
 	step: 1,
         width: '100px',
 	slide: function( event, ui ) {
@@ -23,7 +32,7 @@ var crosstab = (function ($element, description, data_func, label) {
     });
 
     // first time needs two redraws
-    pie(data_func(slider_value));
+    pie(opts.dim.pie(slider_value));
     update();
 
     return update;
