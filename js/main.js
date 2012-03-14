@@ -65,7 +65,7 @@
 
     var $proto = $("<li></li>"), $el, $crosstabs = $("#crosstabs");
 
-    crosstabs.map(function (options) {
+    crosstabs = crosstabs.map(function (options) {
         $el = $proto.clone();
         $crosstabs.append($el);
         options.$element = $el;
@@ -75,6 +75,7 @@
 
     var update = function () {
         crosstabs.map(function (update_crosstab) {
+            console.log(update_crosstab);
             update_crosstab();
         });
     };
