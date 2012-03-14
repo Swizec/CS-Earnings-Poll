@@ -47,6 +47,25 @@
                     });
                 data.map(function (item) { fin_data[item.hourly_rate-1].count += 1; });
                 return fin_data;
+            },
+            type_vs_pay: function (type) {
+                var labels = ['do 7€/h',
+                              '7€/h do 13€/h',
+                              '13€/h do 16€/h',
+                              '16€/h do 20€/h',
+                              '20€/h do 50€/h',
+                              '50€/h do 80€/h',
+                              'nad 80€/h'];
+
+                var data = DATA.filter(slice_func).filter(function (item) {
+                    return item.pay_type == type;
+                }),
+                    fin_data = d3.range(labels.length).map(function (i) {
+                        return {label: labels[i],
+                                count: 0};
+                    });
+                data.map(function (item) { fin_data[item.hourly_rate-1].count += 1; });
+                return fin_data;
             }
         };
 
@@ -59,6 +78,11 @@
         {desc: Handlebars.compile("Studying for {{value}} hours a week."),
          dim: {pie: data_functions.study_vs_pay,
                slider: ["do 10h", "11-20h", "21-30h", "31-40h", "nad 50h"]},
+         label: "students"
+        },
+        {desc: Handlebars.compile("Paid by {{value}}."),
+         dim: {pie: data_functions.type_vs_pay,
+               slider: ["Studentska napotnica", "Avtorska pogodba", "Lastno podjetje", "Navadna placa"]},
          label: "students"
         }
     ];
