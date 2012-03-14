@@ -11,17 +11,38 @@
 
         data_functions = {
             year_vs_pay: function (year) {
-                var hourly_rate_labels = ['do 7€/h',
-                                          '7€/h do 13€/h',
-                                          '13€/h do 16€/h',
-                                          '16€/h do 20€/h',
-                                          '20€/h do 50€/h',
-                                          '50€/h do 80€/h',
-                                          'nad 80€/h'];
+                var labels = ['do 7€/h',
+                              '7€/h do 13€/h',
+                              '13€/h do 16€/h',
+                              '16€/h do 20€/h',
+                              '20€/h do 50€/h',
+                              '50€/h do 80€/h',
+                              'nad 80€/h'];
 
-                var data = DATA.filter(slice_func).filter(function (item) { return item.years_study == year; }),
-                    fin_data = d3.range(7).map(function (i) {
-                        return {label: hourly_rate_labels[i],
+                var data = DATA.filter(slice_func).filter(function (item) {
+                    return item.years_study == year;
+                }),
+                    fin_data = d3.range(labels.length).map(function (i) {
+                        return {label: labels[i],
+                                count: 0};
+                    });
+                data.map(function (item) { fin_data[item.hourly_rate-1].count += 1; });
+                return fin_data;
+            },
+            study_vs_pay: function (study) {
+                var labels = ['do 7€/h',
+                              '7€/h do 13€/h',
+                              '13€/h do 16€/h',
+                              '16€/h do 20€/h',
+                              '20€/h do 50€/h',
+                              '50€/h do 80€/h',
+                              'nad 80€/h'];
+
+                var data = DATA.filter(slice_func).filter(function (item) {
+                    return item.study_time == study;
+                }),
+                    fin_data = d3.range(labels.length).map(function (i) {
+                        return {label: labels[i],
                                 count: 0};
                     });
                 data.map(function (item) { fin_data[item.hourly_rate-1].count += 1; });
@@ -30,15 +51,22 @@
         };
 
     var crosstabs = [];
+    var $proto = $("<li></li>"), $el, $crosstabs = $("#crosstabs");
 
-    for (var key in data_functions) {
-        var $el = $("<ul></ul>");
-        $("#crosstabs").append($el);
-        crosstabs.push(crosstab($el,
-                                Handlebars.compile("Studying for {{value}} years."),
-                                data_functions[key],
-                                "students"));
-    }
+    $el = $proto.clone();
+    $("#crosstabs").append($el);
+    crosstabs.push(crosstab($el,
+                            Handlebars.compile("Studying for {{value}} hours a week."),
+                            data_functions.year_vs_pay,
+                            "students"));
+
+    $el = $proto.clone();
+    $("#crosstabs").append($el);
+    crosstabs.push(crosstab($el,
+                            Handlebars.compile("Studying for {{value}} hours a week."),
+                            data_functions.study_vs_pay,
+                            "students"));
+
 
     var update = function () {
         crosstabs.map(function (update_crosstab) {
