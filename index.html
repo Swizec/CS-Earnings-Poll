@@ -62,24 +62,30 @@
         <button class="btn" name="everyone">Everyone</button>
       </div>
 
-      <p>
-	<label id="amount">Studying for 1 years.</label>
-      </p>
-      <div style="width:300px">
-        <div id="slider"></div>
-      </div>
-
-      <div id="pie1" class="pie-chart"></div>
-      <div id="pie2" class="pie-chart"></div>
+      <ul id="crosstabs">
+      </ul>
 
     </div> <!-- /container -->
+
+    <div style="display: none" class="crosstab-template">
+      <p class="description">
+
+      </p>
+      <div style="width:300px">
+        <div class="slider"></div>
+      </div>
+
+      <div class="pie-chart"></div>
+    </div>
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="./js/jquery.js"></script>
     <script src="./js/jquery-ui-1.8.16.custom.min.js"></script>
- <!--   <script src="./js/bootstrap-transition.js"></script>
+    <script src="./js/handlebars-1.0.0.beta.6.js"></script>
+    <script src="./js/d3.v2.min.js?2.8.1"></script>
+<!--   <script src="./js/bootstrap-transition.js"></script>
     <script src="./js/bootstrap-alert.js"></script>
     <script src="./js/bootstrap-modal.js"></script>
     <script src="./js/bootstrap-dropdown.js"></script>
@@ -91,8 +97,8 @@
     <script src="./js/bootstrap-carousel.js"></script>
     <script src="./js/bootstrap-typeahead.js"></script>-->
     <script src="./js/bootstrap-button.js"></script>
-    <script src="./js/d3.v2.min.js?2.8.1"></script>
     <script src="./js/piechart.js"></script>
+    <script src="./js/crosstab.js"></script>
 
     <script src="./js/data.js"></script>
     <script src="./js/main.js"></script>
